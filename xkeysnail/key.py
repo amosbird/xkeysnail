@@ -742,7 +742,7 @@ class Modifier(Enum):
     L_CONTROL, R_CONTROL, CONTROL, \
         L_ALT, R_ALT, ALT, \
         L_SHIFT, R_SHIFT, SHIFT, \
-        L_SUPER, R_SUPER, SUPER = range(12)
+        L_SUPER, R_SUPER, SUPER, HYPER, MODE = range(14)
 
     @classmethod
     def _get_modifier_map(cls):
@@ -752,13 +752,15 @@ class Modifier(Enum):
             cls.CONTROL: {Key.LEFT_CTRL, Key.RIGHT_CTRL},
             cls.L_ALT: {Key.LEFT_ALT},
             cls.R_ALT: {Key.RIGHT_ALT},
-            cls.ALT: {Key.LEFT_ALT, Key.RIGHT_ALT},
+            cls.HYPER: {Key.RIGHT_ALT},
+            cls.ALT: {Key.LEFT_ALT},
             cls.L_SHIFT: {Key.LEFT_SHIFT},
             cls.R_SHIFT: {Key.RIGHT_SHIFT},
             cls.SHIFT: {Key.LEFT_SHIFT, Key.RIGHT_SHIFT},
             cls.L_SUPER: {Key.LEFT_META},
             cls.R_SUPER: {Key.RIGHT_META},
-            cls.SUPER: {Key.LEFT_META, Key.RIGHT_META}
+            cls.SUPER: {Key.LEFT_META, Key.RIGHT_META},
+            cls.MODE: {Key.HENKAN}
         }
 
     def __str__(self):
@@ -774,6 +776,8 @@ class Modifier(Enum):
         if self.value == self.L_SUPER.value: return "LSuper"
         if self.value == self.R_SUPER.value: return "RSuper"
         if self.value == self.SUPER.value: return "Super"
+        if self.value == self.HYPER.value: return "Hyper"
+        if self.value == self.MODE.value: return "Mode"
         return None
 
     def is_specified(self):
@@ -784,7 +788,9 @@ class Modifier(Enum):
                 self.value == self.L_SHIFT.value or \
                 self.value == self.R_SHIFT.value or \
                 self.value == self.L_SUPER.value or \
-                self.value == self.R_SUPER.value
+                self.value == self.R_SUPER.value or \
+                self.value == self.HYPER.value or \
+                self.value == self.MODE.value
 
     def to_left(self):
         if self.value == self.CONTROL.value:
