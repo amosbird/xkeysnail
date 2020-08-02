@@ -6,6 +6,9 @@ from inspect import signature
 from .key import Action, Combo, Key, Modifier
 from .output import send_combo, send_key_action, send_key, is_pressed, output_modifier_key
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 __author__ = 'zh'
 
 # ============================================================ #
@@ -135,7 +138,7 @@ def K(exp):
     import re
     modifier_strs = []
     while True:
-        m = re.match(r"\A(LC|LCtrl|RC|RCtrl|C|Ctrl|LM|LAlt|RM|RAlt|M|Alt|LShift|RShift|Shift|LSuper|LWin|RSuper|RWin|Super|Win)-", exp)
+        m = re.match(r"\A(LC|LCtrl|RC|RCtrl|C|Ctrl|LM|LAlt|RM|RAlt|M|Alt|LShift|RShift|Shift|LSuper|LWin|RSuper|RWin|Super|Win|Hyper|Mode)-", exp)
         if m is None:
             break
         modifier = m.group(1)
@@ -176,6 +179,10 @@ def create_modifiers_from_strings(modifier_strs):
             modifiers.add(Modifier.R_SHIFT)
         elif modifier_str == 'Shift':
             modifiers.add(Modifier.SHIFT)
+        elif modifier_str == 'Hyper':
+            modifiers.add(Modifier.HYPER)
+        elif modifier_str == 'Mode':
+            modifiers.add(Modifier.MODE)
     return modifiers
 
 # ============================================================
@@ -341,7 +348,7 @@ def multipurpose_handler(multipurpose_map, key, action):
 
     def maybe_press_modifiers(multipurpose_map):
         """Search the multipurpose map for keys that are pressed. If found and
-        we have not yet sent it's modifier translation we do so."""
+        we have not yet sent its modifier translation we do so."""
         for k, [ _, mod_key, state ] in multipurpose_map.items():
             if k in _pressed_keys and mod_key not in _pressed_modifier_keys:
                 on_key(mod_key, Action.PRESS)
@@ -362,6 +369,7 @@ def multipurpose_handler(multipurpose_map, key, action):
             # it is a single press and release
             if key_was_last_press and _last_key_time + _timeout > time():
                 maybe_press_modifiers(multipurpose_map)  # maybe other multipurpose keys are down
+                on_key(key, Action.RELEASE)
                 on_key(single_key, Action.PRESS)
                 on_key(single_key, Action.RELEASE)
             # it is the modifier in a combo
@@ -410,8 +418,6 @@ def on_event(event, device_name, quiet):
                 break
     if active_multipurpose_map:
         multipurpose_handler(active_multipurpose_map, key, action)
-        if key in active_multipurpose_map:
-            return
 
     on_key(key, action, wm_class=wm_class, quiet=quiet)
     update_pressed_keys(key, action)
@@ -425,7 +431,7 @@ def on_key(key, action, wm_class=None, quiet=False):
         send_key_action(key, action)
         # Release mapped modifier only when physical mod
         # is released
-        if str(key) != "Key.LEFT_SHIFT" and str(key) != "Key.RIGHT_SHIFT":
+        if str(key) != "Key.LEFT_SHIFT" and str(key) != "Key.RIGHT_SHIFT" and str(key) != "Key.HENKAN":
             for output_key in output_mods:
                 update_pressed_modifier_keys(output_key, action)
                 send_key_action(output_key, action)
