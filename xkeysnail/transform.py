@@ -369,9 +369,14 @@ def multipurpose_handler(multipurpose_map, key, action):
             # it is a single press and release
             if key_was_last_press and _last_key_time + _timeout > time():
                 maybe_press_modifiers(multipurpose_map)  # maybe other multipurpose keys are down
-                on_key(key, Action.RELEASE)
-                on_key(single_key, Action.PRESS)
-                on_key(single_key, Action.RELEASE)
+                if str(key) == "Key.RIGHT_SHIFT" and Key.HENKAN in _pressed_modifier_keys:
+                    on_key(single_key, Action.PRESS)
+                    on_key(single_key, Action.RELEASE)
+                    on_key(key, Action.RELEASE)
+                else:
+                    on_key(key, Action.RELEASE)
+                    on_key(single_key, Action.PRESS)
+                    on_key(single_key, Action.RELEASE)
             # it is the modifier in a combo
             elif mod_is_down:
                 on_key(mod_key, Action.RELEASE)
@@ -429,9 +434,7 @@ def on_key(key, action, wm_class=None, quiet=False):
     if key in Modifier.get_all_keys():
         update_pressed_modifier_keys(key, action)
         send_key_action(key, action)
-        # Release mapped modifier only when physical mod
-        # is released
-        if str(key) != "Key.LEFT_SHIFT" and str(key) != "Key.RIGHT_SHIFT" and str(key) != "Key.HENKAN":
+        if str(key) in ("Key.LEFT_SHIFT", "Key.RIGHT_CTRL", "Key.RIGHT_ALT"):
             for output_key in output_mods:
                 update_pressed_modifier_keys(output_key, action)
                 send_key_action(output_key, action)
