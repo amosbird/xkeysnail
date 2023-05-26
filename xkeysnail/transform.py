@@ -370,11 +370,11 @@ def multipurpose_handler(multipurpose_map, key, action):
             # it is a single press and release
             if key_was_last_press and _last_key_time + _timeout > time():
                 maybe_press_modifiers(multipurpose_map)  # maybe other multipurpose keys are down
-                if str(key) == "Key.RIGHT_SHIFT" and Key.HENKAN in _pressed_modifier_keys:
+                if key == Key.RIGHT_SHIFT and Key.HENKAN in _pressed_modifier_keys:
                     on_key(single_key, Action.PRESS)
                     on_key(single_key, Action.RELEASE)
                     on_key(key, Action.RELEASE)
-                elif str(key) == "Key.RIGHT_ALT":
+                elif key == Key.RIGHT_ALT:
                     if Key.RIGHT_SHIFT in _pressed_modifier_keys:
                         os.system("sudo -u amos /home/amos/scripts/inputclipboard")
                     else:
