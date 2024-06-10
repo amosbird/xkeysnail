@@ -25,9 +25,6 @@ def is_keyboard_device(device):
        Key.Z not in supported_keys:
         # Not support common keys. Not keyboard.
         return False
-    if Key.BTN_MOUSE in supported_keys:
-        # Mouse.
-        return False
     # Otherwise, its keyboard!
     return True
 
