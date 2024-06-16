@@ -390,8 +390,16 @@ def multipurpose_handler(multipurpose_map, key, action):
             # it is the modifier in a combo
             elif mod_is_down:
                 on_key(mod_key, Action.RELEASE)
-        elif action == Action.PRESS and not key_is_down:
-            _last_key_time = time()
+        elif action == Action.PRESS:
+            if key == Key.HENKAN and Key.RIGHT_SHIFT in _pressed_modifier_keys:
+                on_key(key.BACKSPACE, Action.PRESS)
+                on_key(key.BACKSPACE, Action.RELEASE)
+            elif not key_is_down:
+                _last_key_time = time()
+        elif action == Action.REPEAT:
+            if key == Key.HENKAN and Key.RIGHT_SHIFT in _pressed_modifier_keys:
+                on_key(key.BACKSPACE, Action.PRESS)
+                on_key(key.BACKSPACE, Action.RELEASE)
     # if key is not a multipurpose or mod key we want eventual modifiers down
     elif (key not in Modifier.get_all_keys()) and action == Action.PRESS:
         maybe_press_modifiers(multipurpose_map)
