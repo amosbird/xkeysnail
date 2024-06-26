@@ -394,6 +394,7 @@ def multipurpose_handler(multipurpose_map, key, action):
             if key == Key.HENKAN and Key.RIGHT_SHIFT in _pressed_modifier_keys:
                 on_key(key.BACKSPACE, Action.PRESS)
                 on_key(key.BACKSPACE, Action.RELEASE)
+                return
             elif not key_is_down:
                 _last_key_time = time()
         elif action == Action.REPEAT:
