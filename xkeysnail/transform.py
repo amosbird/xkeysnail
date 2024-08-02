@@ -381,11 +381,13 @@ def multipurpose_handler(multipurpose_map, key, action):
                         on_key(key, Action.RELEASE)
                         on_key(Key.LEFT_SHIFT, Action.PRESS)
                         on_key(key.INSERT, Action.PRESS)
+                        sleep(0.005)()
                         on_key(key.INSERT, Action.RELEASE)
                         on_key(key.LEFT_SHIFT, Action.RELEASE)
                 else:
                     on_key(key, Action.RELEASE)
                     on_key(single_key, Action.PRESS)
+                    sleep(0.005)()
                     on_key(single_key, Action.RELEASE)
             # it is the modifier in a combo
             elif mod_is_down:
