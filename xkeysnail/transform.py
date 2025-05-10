@@ -18,8 +18,30 @@ import Xlib.display
 
 _release_combo = False
 
+def is_rofi_window_present(display):
+    """Check if a rofi window exists, efficiently."""
+    root = display.screen().root
+
+    try:
+        # Limit to last 2 or 3 top-level windows (most recent ones)
+        for win in root.query_tree().children[-3:]:
+            try:
+                wm_class = win.get_wm_class()
+                if wm_class and any('rofi' in c.lower() for c in wm_class):
+                    return True  # Early exit on match
+            except Exception:
+                continue  # Handle any inaccessible windows
+    except Exception:
+        pass
+
+    return False
+
 def get_active_window_wm_class(display=Xlib.display.Display()):
     """Get active window's WM_CLASS"""
+
+    if is_rofi_window_present(display):
+        return ""
+
     current_window = display.get_input_focus().focus
     pair = get_class_name(current_window)
     if pair:
