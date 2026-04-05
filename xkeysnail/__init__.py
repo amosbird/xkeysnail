@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import sys as _sys
+import os as _os
+_vendor_dir = _os.path.dirname(_os.path.abspath(__file__))
+if _vendor_dir not in _sys.path:
+    _sys.path.insert(0, _vendor_dir)
+
 
 def eval_file(path):
     with open(path, "rb") as file:
@@ -12,7 +18,7 @@ def uinput_device_exists():
 
 
 def has_access_to_uinput():
-    from evdev.uinput import UInputError
+    from xkeysnail._evdev import UInputError
     try:
         from xkeysnail.output import _uinput  # noqa: F401
         return True

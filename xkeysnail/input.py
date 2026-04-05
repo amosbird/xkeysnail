@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from evdev import ecodes, InputDevice, list_devices
+from xkeysnail._evdev import ecodes, InputDevice, list_devices
 from select import select
 from sys import exit
 from .transform import on_event
@@ -104,7 +104,7 @@ def loop(device_matches, device_watch, quiet):
         exit(1)
 
     if device_watch:
-        from inotify_simple import INotify, flags
+        from xkeysnail.inotify_simple import INotify, flags
         inotify = INotify()
         inotify.add_watch("/dev/input", flags.CREATE | flags.ATTRIB)
         print("Watching keyboard devices plug in")

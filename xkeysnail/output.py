@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from evdev import ecodes
-from evdev.uinput import UInput
+from xkeysnail._evdev import ecodes, UInput
 from .key import Action, Combo, Modifier
 
 import pprint
